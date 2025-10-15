@@ -23,6 +23,7 @@
 #include "i2c.h"
 #include "usart.h"
 #include "gpio.h"
+#include "buzzer.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -82,6 +83,8 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
+  MX_TIM2_Init();
+
 
   /* USER CODE BEGIN Init */
 
@@ -95,11 +98,14 @@ int main(void)
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
+
+    /* USER CODE BEGIN 2 */
   MX_GPIO_Init();
   MX_I2C1_Init();
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   oled_Init();
+  Buzzer_Init();
 
   /* USER CODE END 2 */
  
@@ -275,7 +281,16 @@ void KB_Test( int* timer_second, int8_t* key, char* last_buffer, enum TimerState
 	else if (*state == COUNTDOWN){
 		if((*timer_second) == 0){
 			*state = STOPPED;
+			uint32_t melody[] = {
+				523, 587, 659, 853, 234, 0
+			};
 
+			uint32_t durations[] = {
+				4, 6, 3, 2, 2, 2
+			};
+
+			uint16_t melody_length = sizeof(melody) / sizeof(melody[0]);
+			Buzzer_Play(melody, durations, melody_length);
 		}
 		else if((*func_tics) == 67){
 			(*timer_second)--;
