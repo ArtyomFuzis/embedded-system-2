@@ -240,6 +240,7 @@ void KB_Test( int* timer_second, int8_t* key, char* last_buffer, enum TimerState
 			} else if ( cur_key == 0x02) {
 				(*timer_second)--;
 			} else if ( cur_key == 0x01) {
+				if(*timer_second != 0)
 				(*state) = COUNTDOWN;
 			}
 			key[0] = cur_key;
@@ -282,11 +283,27 @@ void KB_Test( int* timer_second, int8_t* key, char* last_buffer, enum TimerState
 		if((*timer_second) == 0){
 			*state = STOPPED;
 			uint32_t melody[] = {
-				523, 587, 659, 853, 234, 0
+			    523, 587, 659, 698, 784, 880, 988, 1047,
+			    523, 587, 659, 698, 784, 880, 988, 1047,
+			    494, 523, 587, 659, 740, 784, 880, 988,
+			    440, 494, 523, 587, 659, 740, 784, 880,
+			    392, 440, 494, 523, 587, 659, 740, 784,
+			    392, 440, 494, 523, 587, 659, 740, 784,
+			    440, 494, 523, 587, 659, 740, 784, 880,
+			    494, 523, 587, 659, 740, 784, 880, 988,
+			    0
 			};
 
 			uint32_t durations[] = {
-				4, 6, 3, 2, 2, 2
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    4, 4, 4, 4, 4, 4, 4, 4,
+			    2
 			};
 
 			uint16_t melody_length = sizeof(melody) / sizeof(melody[0]);
@@ -309,6 +326,7 @@ void KB_Test( int* timer_second, int8_t* key, char* last_buffer, enum TimerState
 		cur_key = Check_Row(Row[0]);
 		if(cur_key != key[0]){
 			if (cur_key == 0x01) {
+				if (*timer_second != 0)
 				(*state) = COUNTDOWN;
 			}
 			key[0] = cur_key;
